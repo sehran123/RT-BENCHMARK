@@ -1,1 +1,6 @@
+# Allow all user agents to crawl everything
+User-agent: *
+Disallow:
 
+# Specify the location of the sitemap
+Sitemap: https://rtgametry.netlify.app/sitemap.xml
