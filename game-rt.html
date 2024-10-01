@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title></title>
+  
+  <style>
+    
+    body {
+           -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+    }
+    
+    .scrn {
+      width: 100%;
+      height: calc(100% - 50px);
+      position: fixed;
+      left: 0px;
+      top: 50px;
+      background-color: #063880;
+    }
+    
+    .ball {
+      width: 70px;
+      height: 70px;
+      position: absolute;
+      left: calc(50% - 35px);
+      top: calc(50% - 35px);
+      background-color: #ffffff;
+      border-radius: 100%;
+      border: none;
+      box-shadow: 0px 0px 8px #000000;
+      transition: all 0.0625s;
+    }
+    .ball:active {
+      background-color: #ffffff;
+      transform: scale(0.98);
+      box-shadow: 0px 0px 4px #000000;
+    }
+    
+    .toolbar {
+      width: 100%;
+      height: 50px;
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      background-color: #FFFFFF;
+      box-shadow: 5px 0px 6px #000000;
+      font-family: georgia;
+    }
+    
+    .topBut {
+      background-color: #ffffff00;
+      position: fixed;
+      top: 12px;
+      height: 22px;
+      width: 50px;
+      border: none;
+      color: white;
+      font-family: georgia;
+font-size: 15px;
+border: none;
+padding: 2px;
+padding-left: 4px;
+border-radius: 4px;
+background-color: #063880;
+color: white;
+box-shadow: 0.4px 0.4px 2px #000000;
+transition: all 0.3s;
+    }
+    .rig {
+      right: 20px;
+      width: 67px;
+      height: 26px;
+      font-size: 14px;
+    }
+    .lef1 {
+      left: 20px;
+      width: 52px;
+      height: 22px;
+    }
+    .lef2 {
+      left: 95px;
+      width: 70px;
+      height: 22px;
+    }
+    
+    #count {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: #41414147;
+      border: none;
+      color: #012252;
+      font-size: 80px;
+    }
+    .scre {
+      
+      position: fixed;
+      bottom: 0px;
+      left: 0px;
+      
+      background-color: #494949;
+      width: 100%;
+      height: 100%;
+    }
+    
+    #stopwatch {
+      position: fixed;
+      left: 200px;
+      top: 12px;
+      width: 45px;
+      height: 22px;
+      
+      color: font-family: georgia;
+      font-size: 15px;
+      border: none;
+      padding-top: 4px;
+      padding-left: 8px;
+      border-radius: 4px;
+      background-color: #063880;
+      color: white;
+      box-shadow: 0.4px 0.4px 3px #000000;
+      transition: all 0.3s;
+}
+
+.anaBut {
+      width: 80px;
+      height: 36px;
+      color: white;
+      font-family: georgia;
+      font-size: 15px;
+      border: none;
+      padding: 2px;
+      padding-left: 4px;
+      border-radius: 4px;
+      background-color: #063880;
+      color: white;
+      box-shadow: 0.4px 0.4px 3px #000000;
+      transition: all 0.3s;
+}
+
+.anaBut:hover {
+    transform: scale(0.98);
+background-color: #00204D;
+box-shadow: 0.2px 0.2px 1px #000000; /* Change color on hover */
+}
+
+.anaBut:active {
+    background-color: #001f3f; /* Darker color when clicked */
+}
+    
+   #nameFill {
+     width: 70%;
+     height: 200px;
+     position: fixed;
+     top: 32%;
+     left: 15%;
+     background-color: white;
+     border: 1.5px solid ##002ECE;
+     border-radius: 15px;
+     box-shadow: 0px 0px 8px #393939;
+   }
+   
+   #nameInp {
+     width: 140px;
+     height: 25px;
+     border: 0px solid #000000;
+     outline: none;
+     border-bottom: 2.5px solid #D4D4D4;
+     transition: border-bottom 0.4s;
+     font-family: monospace;
+     text-align: center;
+   }
+   #nameInp:focus {
+     border-bottom: 2.5px solid #092EB0;
+   }
+    
+    #gameOv {
+      display: none;
+      width: 100%;
+     height: 100%;
+     position: fixed;
+     top: 0%;
+     left: 0%;
+     background-color: #5B5B5B4D;
+    }
+    #scoreBoard {
+      width: 70%;
+     height: 430px;
+     position: fixed;
+     top: calc(50% - 215px);
+     left: 15%;
+     background-color: white;
+     border-radius: 6px;
+     box-shadow: 0px 0px 8px #262626;
+     color: #063880;
+     font-family: georgia;
+    }
+    .headTxt {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    .respTxt {
+      font-size: 14px;
+      font-weight: lighter;
+      margin-top: 2px;
+      margin-bottom: 15px;
+    }
+  </style>
+  
+  
+</head>
+
+<body>
+  
+<div class="toolbar" id="toolb">
+  <input type="text" class="topBut lef1" id="levelSh" value="Level 1" readonly>
+  <input type="text" class="topBut lef2" id="leftBall" value="Balls :- 20" readonly>
+  <div id="stopwatch">00.00</div>
+  <button class="topBut rig" id="refrBut" onmouseup="location.reload()">Restart</button>
+</div>
+<div class="scrn" id="scrn" onmouseup="negScore()">
+
+</div>
+  <button class="ball" onmouseup="nextBall()" id="ball"></button>
+<button id="count">3</button>
+<div id="stopwatch2">00.00</div>
+<center>
+<div id="gameOv"><br><br><br>
+  <div id="scoreBoard">
+    <h1 class="heading">Analysis</h1>
+    
+    <h2 class="headTxt">Score</h2>
+    <p class="respTxt" id="scoreTxt"></p>
+    <h4 class="headTxt">High Score</h4>
+    <p class="respTxt" id="higScoreTxt"></p>
+    
+    <p class="headTxt">Avg. Reflex Time</p>
+    <p class="respTxt" id="avgRefTxt"></p>
+    <p class="headTxt">Lowest Avg. Reflex Time</p>
+    <p class="respTxt" id="avgLowRefTxt"></p>
+    <p class="headTxt">Inaccuracies</p>
+    <p class="respTxt" id="inaccTxt"></p>
+    <br>
+    <button class="anaBut" onmouseup="location.href='scores-rt.html';">Scores</button>&nbsp;&nbsp;&nbsp;
+    <button class="anaBut" onmouseup="location.reload()">Restart</button>
+    
+    
+  </div>
+</div> </center>
+<div id="scre"><center>
+    <div id="nameFill"><br><br>
+      <b style="font-size: 15px;font-family: georgia;color: #0A1F68;">Enter Your Name :-</b><br><br>
+      <input list="nameList" type="text" id="nameInp" /><br><br>
+      
+      <datalist id="nameList">
+       
+      </datalist>
+      
+      
+      <button class="anaBut" onmouseup="nameSub()">Submit</button>
+    </div></center>
+  </div>
+  
+
+<script src="../stopwatch.js"></script>
+
+</body>
+<script>
+
+var playerName = "";  
+const screenWidth = window.innerWidth;
+let screenHeight = window.innerHeight;
+var balls = 20;
+var times = [];
+var score = 0;
+var inaccuracies = 0;
+var avgTime;
+var higScore = 832;
+var lowAvgTime = 0.582;
+
+var data = {
+  score: score,
+  avgTime: avgTime,
+  totTime: stopwatch.innerHTML,
+  inaccuracies: inaccuracies
+};
+
+var mainData;
+
+if (localStorage.getItem("reflexGameData") !== null) {
+  
+  mainData = JSON.parse(localStorage.getItem("reflexGameData"));
+  
+  for(let i = 0;i < mainData.players.length;i++) {
+  nameList.innerHTML += `<option value="${mainData.players[i]}">${mainData.players[i]}</option>`;
+  }
+  
+} else {
+ mainData = {
+  players: []
+}
+}
+  
+  function countdown() {
+    var a = setInterval(function() {
+      if(Number(count.innerHTML) > 1) {
+      count.innerHTML = Number(count.innerHTML) - 1;
+      } 
+    }, 1000);
+    setTimeout(function() {
+      count.style.display = "none";
+        clearInterval(a);
+        startGame();
+    }, 3000);
+    
+  }
+
+  
+  function startGame() {
+    levelSh.value = "Level 1";
+    leftBall.value = "Balls - 20";
+    balls = 21;
+    toggleStopwatch("stopwatch");
+    nextBall();
+  }
+  
+  
+  function nextBall() {
+    ballStyle = ball.style;
+    nxt();
+    times.push(stopwatch2.innerHTML);
+    if(balls <= 20 && balls >= 16) {
+      levelSh.value = "Level 1";
+      ballStyle.width = "50px";
+      ballStyle.height = "50px";
+      resetStopwatch2('stopwatch2');
+      toggleStopwatch2('stopwatch2');
+    }
+    else if(balls < 16 && balls >= 12) {
+      levelSh.value = "Level 2";
+      ballStyle.width = "45px";
+      ballStyle.height = "45px";
+      resetStopwatch2('stopwatch2');
+      toggleStopwatch2('stopwatch2');
+    }
+    else if(balls < 12 && balls >= 8) {
+      levelSh.value = "Level 3";
+      ballStyle.width = "40px";
+      ballStyle.height = "40px";
+      resetStopwatch2('stopwatch2');
+      toggleStopwatch2('stopwatch2');
+    }
+    else if(balls < 8 && balls >= 4) {
+      levelSh.value = "Level 4";
+      ballStyle.width = "35px";
+      ballStyle.height = "35px";
+      resetStopwatch2('stopwatch2');
+      toggleStopwatch2('stopwatch2');
+    }
+    else if(balls < 4 && balls > 0) {
+      levelSh.value = "Level 5";
+      ballStyle.width = "30px";
+      ballStyle.height = "30px";
+      resetStopwatch2('stopwatch2');
+      toggleStopwatch2('stopwatch2');
+    }
+    else if(balls == 0) {
+      resetStopwatch2('stopwatch2');
+      //toggleStopwatch2('stopwatch2');
+      gameOver();
+    }
+    
+    
+  }
+  
+  function nxt() {
+    if(balls > 0) {
+    balls = balls - 1;
+    leftBall.value = "Balls - " + balls;
+    
+    const button = document.getElementById('ball');
+    // Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Calculate random positions
+    const randomX = Math.random() * (viewportWidth - button.offsetWidth);
+    const randomY = Math.random() * (viewportHeight - button.offsetHeight - 50 - toolb.offsetHeight) + toolb.offsetHeight;
+
+    // Set the new position
+    button.style.left = `${randomX}px`;
+    button.style.top = `${randomY}px`;
+
+
+
+    }
+  }
+  
+  function negScore() {
+    inaccuracies = Number(inaccuracies) + 1;
+  }
+  
+function gameOver() {
+  toggleStopwatch('stopwatch');
+  gameOv.style.display = "block";
+  
+  scoring();
+  var playerData = mainData[playerName];
+  if (!mainData[playerName]) {
+  mainData[playerName] = { played: 0,games: {} };
+  if (!mainData.players) {
+    mainData.players = [];
+    mainData.players.push(playerName);
+    nameList.innerHTML += `<option value="${playerName}">${playerName}</option>`;
+  } else {
+    mainData.players.push(playerName);
+    nameList.innerHTML += `<option value="${playerName}">${playerName}</option>`;
+  }
+  // Initialize player object with default values
+}
+
+mainData[playerName].played = Number(mainData[playerName].played) + 1;
+mainData[playerName].games["game" + mainData[playerName].played] = data;
+
+mainData[playerName].minRexTime = calculatePlayerStats(playerName, "avgTime").min;
+mainData[playerName].minTotTime = calculatePlayerStats(playerName, "totTime").min;
+mainData[playerName].highestScore = calculatePlayerStats(playerName, "score").max;
+mainData[playerName].avgRexTime = calculatePlayerStats(playerName, "avgTime").average;
+mainData[playerName].avgTotTime = calculatePlayerStats(playerName, "totTime").average;
+mainData[playerName].avgScore = calculatePlayerStats(playerName, "score").average;
+mainData[playerName].avgInaccuracies = calculatePlayerStats(playerName, "inaccuracies").average;
+mainData[playerName].RefRating = Number(mainData[playerName].avgScore.toFixed(0)) + Number(1000);
+
+
+scoreTxt.innerHTML = score.toFixed(0);
+   
+   higScoreTxt.innerHTML = mainData[playerName].highestScore;
+   
+   avgRefTxt.innerHTML = (avgTime * 1000).toFixed(0) + "ms";
+   
+   avgLowRefTxt.innerHTML = (mainData[playerName].minRexTime) + "ms";
+   
+   inaccTxt.innerHTML = inaccuracies;
+   
+
+
+localStorage.setItem("reflexGameData", JSON.stringify(mainData));
+}
+  
+  var plus;
+  var minus;
+ function scoring() {
+   avgTime = Number(stopwatch.innerHTML) / 20;
+   
+    plus = 2000 - (Number(stopwatch.innerHTML) * 100);
+   
+    minus = avgTime * inaccuracies * 100;
+   
+   score = plus - minus;
+   
+   
+   data = {
+     score: score.toFixed(0),
+     avgTime:  (avgTime * 1000).toFixed(0),
+     totTime: stopwatch.innerHTML,
+     inaccuracies: inaccuracies
+   }
+ } 
+   
+   function nameSub() {
+     if(nameInp.value != '') playerName = nameInp.value;
+     scre.style.display = 'none';
+     nameFill.style.display = 'none';
+     countdown();
+   }
+  
+  
+  
+
+
+function calculatePlayerStats(playerName, scoreKey) {
+  if (!mainData[playerName]) {
+    return { error: "Player not found." }; // Return error in object
+  }
+
+  const playerGames = mainData[playerName].games;
+  const scores = [];
+
+  // Collect scores for the specified score key from all games
+  for (const game in playerGames) {
+    if (playerGames[game][scoreKey] !== undefined) { // Check if scoreKey exists
+      scores.push(playerGames[game][scoreKey]);
+    }
+  }
+
+  // Check if there are scores available for the specified score key
+  if (scores.length === 0) {
+    return { error: `No scores found for key '${scoreKey}' played by this player.` }; // Return error in object
+  }
+
+  // Calculate minimum, maximum, and average scores
+  const minScore = Math.min(...scores);
+  const maxScore = Math.max(...scores);
+  let totalScore = 0;
+  for (let i = 0; i < scores.length; i++) {
+    totalScore = Number(totalScore) + Number(scores[i]); // Sum all scores
+  }
+  const averageScore = totalScore / scores.length; // Compute average score
+
+
+  // Return results as an object
+  return {
+    min: minScore,
+    max: maxScore,
+    average: parseFloat(averageScore.toFixed(2)) // Round to 2 decimal places
+  };
+}
+
+// Example usage:
+//const stats = calculatePlayerStats("player1", "score2");
+//console.log(stats); // { min: 55, max: 75, average: 65.00 }
+  
+</script>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard</title>
+    <style>
+    
+    body {
+           -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+      background-color: #082F6E;
+    }
+    html {
+      margin: 0px;
+    }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 10px;
+            font-family: georgia;
+            color: #ffffff;
+            box-shadow: 0px 1px 8px #242424;
+        }
+        th, td {
+            border: 1px solid #ffffff;
+            padding: 10px;
+            text-align: center;
+            box-shadow: inset 0px 0px 5px #000000;
+        }
+        th {
+            background-color: #052558;
+            color: #ffffff;
+            font-weight: bold;
+            box-shadow: inset 0px 0px 5px #000000;
+        }
+        .rank-cell {
+            color: #ffffff;
+            font-weight: bold;
+            background-color: #052558;
+            box-shadow: inset 0px 0px 5px #000000;
+        }
+        .controls {
+            text-align: left;
+            margin: 10px;
+            font-family: georgia;
+            color: #FFFFFF;
+        }
+        h1 {
+          margin: 10px;
+          font-family: georgia;
+          color: #ffffff;
+          background-color: #082F6E;
+          border: 2px solid #ffffff;
+          border-radius: 5px;
+          width: 242px;
+        }
+        
+        #sort-criteria {
+          height: 25px;
+          color: white;
+          border: 0.1px solid #ffffff;
+          background-color: #052558;
+          border-bottom: 2px solid #ffffff;
+          font-family: georgia;
+          outline: none;
+          box-shadow: 0px 1px 4px #242424;
+        }
+        
+    </style>
+</head>
+<body>
+<h1>&nbsp;SCOREBOARD</h1>
+<br>
+<div class="controls">
+    <label for="sort-criteria">Sort By: </label>
+    <select id="sort-criteria">
+        <option value="RefRating">Rating</option>
+        <option value="avgRexTime">Avg. Reaction Time</option>
+        <option value="avgTotTime">Avg. Time</option>
+        <option value="avgInaccuracies">Inaccuracies per 100</option>
+        <option value="minRexTime">Best Reaction Time</option>
+        <option value="minTotTime">Lowest Time</option>
+        <option value="played">Tests Played</option>
+    </select>
+</div>
+
+<table id="table">
+    <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Tests Played</th>
+        <th>Rating</th>
+        <th>Avg. Reaction Time</th>
+        <th>Avg. Time</th>
+        <th>Inaccuracies per 100</th>
+        <th>Best Reaction Time</th>
+        <th>Lowest Time</th>
+        
+    </tr>
+</table>
+
+<script>
+    // Sample player data
+var data;
+
+if (localStorage.getItem("reflexGameData") !== null) {
+  
+  data = JSON.parse(localStorage.getItem("reflexGameData"));
+ 
+  
+} else {
+ data = {
+  players: []
+}
+}
+
+    // Extract player names
+    const players = data.players;
+
+    // Default sorting criterion
+    let currentSortCriteria = "RefRating"; // Default sort by Rating
+
+    // Function to render the table based on the sorted player data
+    function renderTable(sortedPlayers) {
+        const table = document.getElementById("table");
+
+        // Clear existing rows (except the header)
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        // Insert sorted player rows
+        sortedPlayers.forEach((player, index) => {
+            const row = table.insertRow();
+
+            // Fill in each cell based on player data
+            const rankCell = row.insertCell(0);
+            rankCell.textContent = index + 1;
+            rankCell.className = "rank-cell"; // Apply style to rank cells
+
+            row.insertCell(1).textContent = player.name; // Name
+            row.insertCell(2).textContent = player.played; // Games Played
+            row.insertCell(3).textContent = player.RefRating; // Rating
+            row.insertCell(4).textContent = (player.avgRexTime.toFixed(0)) + "ms"; // Avg. Reflex Time
+            row.insertCell(5).textContent = (player.avgTotTime.toFixed(2)) + "s"; // Avg. Time
+            row.insertCell(6).textContent = (player.avgInaccuracies * 5).toFixed(0); // Inaccuracies per 100
+            row.insertCell(7).textContent = (player.minRexTime.toFixed(0)) + "ms"; // Best Reflex Time
+            row.insertCell(8).textContent = (player.minTotTime.toFixed(2)) + "s"; // Lowest Time
+            
+        });
+    }
+
+    // Function to sort players based on a given criterion
+    function sortPlayers(criterion) {
+        const sortedPlayers = players.map(playerName => {
+            return {
+                name: playerName,
+                ...data[playerName]
+            };
+        });
+
+        // Determine sorting order based on the selected criterion
+        if (criterion === "played" || criterion === "RefRating") {
+            // For "Games Played" and "Rating", highest value should be on top
+            sortedPlayers.sort((a, b) => b[criterion] - a[criterion]); // Descending order
+        } else {
+            // For all other criteria, lowest value should be on top
+            sortedPlayers.sort((a, b) => a[criterion] - b[criterion]); // Ascending order
+        }
+
+        return sortedPlayers;
+    }
+
+    // Initial rendering of the table sorted by default criterion
+    renderTable(sortPlayers(currentSortCriteria));
+
+    // Add event listener for dropdown selection change
+    document.getElementById("sort-criteria").addEventListener("change", function() {
+        currentSortCriteria = this.value; // Update the current criterion
+        renderTable(sortPlayers(currentSortCriteria)); // Re-render table with new order
+    });
+</script>
+
+</body>
+</html>
